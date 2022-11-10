@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Clipboard example</title>
+    </head>
+    <body>
+        <textarea id="text" cols="80" rows="20"></textarea>
+        <script type="text/javascript">
+            let t = document.getElementById("text");
+            t.addEventListener('paste', (event) => {
+                event.preventDefault();
+                t.textContent = "";
+
+                const clipboard = event.clipboardData || window.clipboardData;
+                const items = clipboard.items;
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    const type = item.type;
+                    if (item.kind === "string") {
+                        item.getAsString((data) => {
+                            t.textContent += "[" + type + "]\n";
+                            t.textContent += data + "\n\n";
+                        });
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
